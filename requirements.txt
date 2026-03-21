@@ -5,3 +5,6 @@ scipy
 # Audio I/O and analysis
 librosa
 soundfile
+
+# Visualisation
+matplotlib
