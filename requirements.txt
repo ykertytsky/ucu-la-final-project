@@ -1,0 +1,7 @@
+# Numerical linear algebra and scientific Python
+numpy
+scipy
+
+# Audio I/O and analysis
+librosa
+soundfile
