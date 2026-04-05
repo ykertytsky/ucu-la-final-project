@@ -8,3 +8,6 @@ soundfile
 
 # Visualisation
 matplotlib
+
+# Optional: GPU SVD on CUDA (e.g. T4 in Colab). Install the CUDA build from pytorch.org if needed.
+torch

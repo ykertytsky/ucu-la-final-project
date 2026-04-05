@@ -1,0 +1,1 @@
+Data is coming from kaggle dataset and belongs to JWEIQI user: https://www.kaggle.com/datasets/jweiqi/voicebank-demand-16k
