@@ -26,12 +26,9 @@ import numpy as np
 import scipy.linalg as la
 import librosa
 import soundfile as sf
-from scipy.signal import butter, filtfilt
 
 
-def define_name(recording_name: str, window_length: int, k_rank: int, is_filtered: bool = False) -> str:
-    if is_filtered:
-        return f"{recording_name}-wl{window_length}-k{k_rank}-denoised-filtered.wav"
+def define_name(recording_name: str, window_length: int, k_rank: int) -> str:
     return f"{recording_name}-wl{window_length}-k{k_rank}-denoised.wav"
 
 
@@ -75,11 +72,6 @@ def hankel_to_signal(Hk: np.ndarray) -> np.ndarray:
 
 def low_rank_approx(U: np.ndarray, s: np.ndarray, Vt: np.ndarray, k: int) -> np.ndarray:
     return (U[:, :k] * s[:k]) @ Vt[:k, :]
-
-
-def highpass(signal: np.ndarray, sr: int, cutoff: float = 2000) -> np.ndarray:
-    b, a = butter(4, cutoff / (sr / 2), btype="high")
-    return filtfilt(b, a, signal)
 
 
 def rms(x: np.ndarray) -> float:
@@ -186,16 +178,12 @@ def run_one_wav(
         Hk = low_rank_approx(U, s, Vt, k_rank)
         denoised = hankel_to_signal(Hk)
         denoised = np.clip(denoised, -1.0, 1.0).astype(np.float32)
-
-        hf_original = highpass(signal, sr, cutoff=1500)
-        hf_denoised = highpass(denoised, sr, cutoff=1500)
-        alpha = 0.7
-        output = denoised + alpha * (hf_original - hf_denoised)
+        output = denoised
         row["time_reconstruct_s"] = time.perf_counter() - t0
 
         if save_audio:
             t0 = time.perf_counter()
-            out_name = define_name(recording_name, L, k_rank, is_filtered=True)
+            out_name = define_name(recording_name, L, k_rank)
             out_path = output_dir / out_name
             out_path.parent.mkdir(parents=True, exist_ok=True)
             sf.write(str(out_path), output, sr)
