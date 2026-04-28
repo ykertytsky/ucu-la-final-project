@@ -1,3 +1,6 @@
 run_pipeline_batch.py
 .venv/
 run_other_methods_batch.py
+
+
+__pycache__/
